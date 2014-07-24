@@ -1,0 +1,29 @@
+{
+  "name": "tevents",
+  "version": "0.0.0",
+  "description": "Event emitter written in typescript",
+  "main": "tevents.js",
+  "scripts": {
+    "test": "jasmine-node spec/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:finalclass/tevents.git"
+  },
+  "keywords": [
+    "events",
+    "eventEmitter",
+    "emitter",
+    "typescript",
+    "ts"
+  ],
+  "author": "Szymon Wygnański <s@finalclass.net> (http://finalclass.net/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/finalclass/tevents/issues"
+  },
+  "homepage": "https://github.com/finalclass/tevents",
+  "devDependencies": {
+    "jasmine-node": "~1.14.5"
+  }
+}
