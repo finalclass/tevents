@@ -167,3 +167,9 @@ module tevents {
     }
   }
 }
+
+if (!this['document']) {
+  Object.keys(tevents).forEach((key:string):void => {
+    this[key] = tevents[key];
+  });
+}

@@ -4,6 +4,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+var _this = this;
 var tevents;
 (function (tevents) {
     tevents.CAPTURE_PHASE = 1;
@@ -185,4 +186,10 @@ var tevents;
     })();
     tevents.Dispatcher = Dispatcher;
 })(tevents || (tevents = {}));
+
+if (!this['document']) {
+    Object.keys(tevents).forEach(function (key) {
+        _this[key] = tevents[key];
+    });
+}
 //# sourceMappingURL=tevents.js.map

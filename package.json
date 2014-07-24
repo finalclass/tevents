@@ -1,6 +1,6 @@
 {
   "name": "tevents",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Event emitter written in typescript",
   "main": "tevents.js",
   "scripts": {
