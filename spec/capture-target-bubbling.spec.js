@@ -1,4 +1,4 @@
-var te = require('../typed-events');
+var te = require('../tevents');
 
 describe('Dispatcher basic', function () {
 
@@ -14,7 +14,6 @@ describe('Dispatcher basic', function () {
     grandParent = new te.Dispatcher();
     grandParent.name = 'grandParent';
     grandParent.parent = root;
-
 
     parent = new te.Dispatcher();
     parent.name = 'parent';

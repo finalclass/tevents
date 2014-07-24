@@ -1,4 +1,4 @@
-var te = require('../typed-events');
+var te = require('../tevents');
 
 describe('Dispatcher basic', function () {
   var disp1;

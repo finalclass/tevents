@@ -4,12 +4,11 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-var _this = this;
-var typedEvents;
-(function (typedEvents) {
-    typedEvents.CAPTURE_PHASE = 1;
-    typedEvents.TARGET_PHASE = 2;
-    typedEvents.BUBBLING_PHASE = 3;
+var tevents;
+(function (tevents) {
+    tevents.CAPTURE_PHASE = 1;
+    tevents.TARGET_PHASE = 2;
+    tevents.BUBBLING_PHASE = 3;
 
     var Event = (function () {
         function Event(_type, bubble) {
@@ -31,7 +30,7 @@ var typedEvents;
         });
         return Event;
     })();
-    typedEvents.Event = Event;
+    tevents.Event = Event;
 
     var DataEvent = (function (_super) {
         __extends(DataEvent, _super);
@@ -41,7 +40,7 @@ var typedEvents;
         }
         return DataEvent;
     })(Event);
-    typedEvents.DataEvent = DataEvent;
+    tevents.DataEvent = DataEvent;
 
     var PropertyChangeEvent = (function (_super) {
         __extends(PropertyChangeEvent, _super);
@@ -54,7 +53,7 @@ var typedEvents;
         }
         return PropertyChangeEvent;
     })(Event);
-    typedEvents.PropertyChangeEvent = PropertyChangeEvent;
+    tevents.PropertyChangeEvent = PropertyChangeEvent;
 
     var Handler = (function () {
         function Handler(handlerFunction, useCapture, once) {
@@ -123,10 +122,10 @@ var typedEvents;
         Dispatcher.prototype.callListeners = function (event) {
             if (event.currentTarget.hasEventListener(event.type)) {
                 event.currentTarget.listeners[event.type].forEach(function (handler) {
-                    if (handler.useCapture && event.phase !== typedEvents.CAPTURE_PHASE) {
+                    if (handler.useCapture && event.phase !== tevents.CAPTURE_PHASE) {
                         return;
                     }
-                    if (!handler.useCapture && event.phase === typedEvents.CAPTURE_PHASE) {
+                    if (!handler.useCapture && event.phase === tevents.CAPTURE_PHASE) {
                         return;
                     }
                     handler.handlerFunction.call(event.currentTarget, event);
@@ -147,7 +146,7 @@ var typedEvents;
 
         Dispatcher.prototype.capturePhase = function (event) {
             var parents = Dispatcher.findParents(event.target);
-            event.phase = typedEvents.CAPTURE_PHASE;
+            event.phase = tevents.CAPTURE_PHASE;
             while (!event.isPropagationStopped && parents.length > 0) {
                 event.currentTarget = parents.pop();
                 this.callListeners(event);
@@ -156,14 +155,14 @@ var typedEvents;
 
         Dispatcher.prototype.targetPhase = function (event) {
             if (!event.isPropagationStopped) {
-                event.phase = typedEvents.TARGET_PHASE;
+                event.phase = tevents.TARGET_PHASE;
                 event.currentTarget = event.target;
                 this.callListeners(event);
             }
         };
 
         Dispatcher.prototype.bubblingPhase = function (event) {
-            event.phase = typedEvents.BUBBLING_PHASE;
+            event.phase = tevents.BUBBLING_PHASE;
             while (!event.isPropagationStopped && event.currentTarget.parent) {
                 event.currentTarget = event.currentTarget.parent;
                 this.callListeners(event);
@@ -184,12 +183,6 @@ var typedEvents;
         };
         return Dispatcher;
     })();
-    typedEvents.Dispatcher = Dispatcher;
-})(typedEvents || (typedEvents = {}));
-
-if (!this['document']) {
-    Object.keys(typedEvents).forEach(function (key) {
-        _this[key] = typedEvents[key];
-    });
-}
-//# sourceMappingURL=typed-events.js.map
+    tevents.Dispatcher = Dispatcher;
+})(tevents || (tevents = {}));
+//# sourceMappingURL=tevents.js.map

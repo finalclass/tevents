@@ -1,4 +1,4 @@
-module typedEvents {
+module tevents {
 
   export var CAPTURE_PHASE:number = 1;
   export var TARGET_PHASE:number = 2;
@@ -166,10 +166,4 @@ module typedEvents {
       return this;
     }
   }
-}
-
-if (!this['document']) {
-  Object.keys(typedEvents).forEach((key:string):void => {
-    this[key] = typedEvents[key];
-  });
 }
