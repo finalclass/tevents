@@ -1,4 +1,4 @@
 typed-events
 ============
 
-Event library with bubling feature written in TypeScript
+Event library with bubbling feature written in TypeScript
