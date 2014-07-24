@@ -10,7 +10,7 @@ module typedEvents {
     public phase:number;
     public isPropagationStopped:boolean;
 
-    constructor(private _type:string) {
+    constructor(private _type:string, public bubble:boolean = false) {
       this.isPropagationStopped = false;
     }
 
@@ -26,6 +26,12 @@ module typedEvents {
   export class DataEvent extends Event {
     constructor(type:string, public data:any) {
       super(type);
+    }
+  }
+
+  export class PropertyChangeEvent extends Event {
+    constructor(public propertyName:string = '', public oldValue?:any, public newValue?:any) {
+      super('propertyChange');
     }
   }
 
@@ -70,11 +76,13 @@ module typedEvents {
     }
 
     public on(eventType:string, func:IHandlerFunction, useCapture:boolean = false):Dispatcher {
+      this.initHandlersForType(eventType);
       this.listeners[eventType].push(new Handler(func, useCapture, false));
       return this;
     }
 
     public once(eventType:string, func:IHandlerFunction, useCapture:boolean = false):Dispatcher {
+      this.initHandlersForType(eventType);
       this.listeners[eventType].push(new Handler(func, useCapture, true));
       return this;
     }
@@ -95,7 +103,7 @@ module typedEvents {
 
     private callListeners(event:Event):void {
       if (event.currentTarget.hasEventListener(event.type)) {
-        event.currentTarget['@eventListeners'][event.type].forEach((handler:Handler) => {
+        event.currentTarget.listeners[event.type].forEach((handler:Handler) => {
           if (handler.useCapture && event.phase !== CAPTURE_PHASE) {
             return;
           }

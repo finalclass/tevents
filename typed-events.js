@@ -12,8 +12,10 @@ var typedEvents;
     typedEvents.BUBBLING_PHASE = 3;
 
     var Event = (function () {
-        function Event(_type) {
+        function Event(_type, bubble) {
+            if (typeof bubble === "undefined") { bubble = false; }
             this._type = _type;
+            this.bubble = bubble;
             this.isPropagationStopped = false;
         }
         Event.prototype.stopPropagation = function () {
@@ -40,6 +42,19 @@ var typedEvents;
         return DataEvent;
     })(Event);
     typedEvents.DataEvent = DataEvent;
+
+    var PropertyChangeEvent = (function (_super) {
+        __extends(PropertyChangeEvent, _super);
+        function PropertyChangeEvent(propertyName, oldValue, newValue) {
+            if (typeof propertyName === "undefined") { propertyName = ''; }
+            _super.call(this, 'propertyChange');
+            this.propertyName = propertyName;
+            this.oldValue = oldValue;
+            this.newValue = newValue;
+        }
+        return PropertyChangeEvent;
+    })(Event);
+    typedEvents.PropertyChangeEvent = PropertyChangeEvent;
 
     var Handler = (function () {
         function Handler(handlerFunction, useCapture, once) {
@@ -79,12 +94,14 @@ var typedEvents;
 
         Dispatcher.prototype.on = function (eventType, func, useCapture) {
             if (typeof useCapture === "undefined") { useCapture = false; }
+            this.initHandlersForType(eventType);
             this.listeners[eventType].push(new Handler(func, useCapture, false));
             return this;
         };
 
         Dispatcher.prototype.once = function (eventType, func, useCapture) {
             if (typeof useCapture === "undefined") { useCapture = false; }
+            this.initHandlersForType(eventType);
             this.listeners[eventType].push(new Handler(func, useCapture, true));
             return this;
         };
@@ -105,7 +122,7 @@ var typedEvents;
 
         Dispatcher.prototype.callListeners = function (event) {
             if (event.currentTarget.hasEventListener(event.type)) {
-                event.currentTarget['@eventListeners'][event.type].forEach(function (handler) {
+                event.currentTarget.listeners[event.type].forEach(function (handler) {
                     if (handler.useCapture && event.phase !== typedEvents.CAPTURE_PHASE) {
                         return;
                     }
@@ -175,4 +192,4 @@ if (!this['document']) {
         _this[key] = typedEvents[key];
     });
 }
-//# sourceMappingURL=typedEvents.js.map
+//# sourceMappingURL=typed-events.js.map

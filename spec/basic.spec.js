@@ -1,4 +1,4 @@
-var te = require('../typedEvents');
+var te = require('../typed-events');
 
 describe('Dispatcher basic', function () {
   var disp1;
@@ -16,13 +16,30 @@ describe('Dispatcher basic', function () {
     }).not.toThrow();
   });
 
-  xit('can dispatch events', function () {
+  it('can dispatch events', function () {
     var spy = jasmine.createSpy('event-handler');
 
     disp1.on('test', spy);
     disp1.dispatchEvent('test');
 
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('can dispatch event given by the string', function () {
+    var spy = jasmine.createSpy('event-handler');
+
+    disp1.on('test', spy);
+    disp1.dispatchEvent('test');
+
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('can remove listeners', function () {
+    var spy = jasmine.createSpy('event-handler');
+    disp1.on('test', spy);
+    disp1.removeEventListener('test', spy);
+    disp1.dispatchEvent('test');
+    expect(spy).not.toHaveBeenCalled();
   });
 
 });
