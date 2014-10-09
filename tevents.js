@@ -10,10 +10,9 @@ var tevents;
     tevents.CAPTURE_PHASE = 1;
     tevents.TARGET_PHASE = 2;
     tevents.BUBBLING_PHASE = 3;
-
     var Event = (function () {
         function Event(_type, bubble) {
-            if (typeof bubble === "undefined") { bubble = false; }
+            if (bubble === void 0) { bubble = false; }
             this._type = _type;
             this.bubble = bubble;
             this.isPropagationStopped = false;
@@ -21,7 +20,6 @@ var tevents;
         Event.prototype.stopPropagation = function () {
             this.isPropagationStopped = true;
         };
-
         Object.defineProperty(Event.prototype, "type", {
             get: function () {
                 return this._type;
@@ -32,7 +30,6 @@ var tevents;
         return Event;
     })();
     tevents.Event = Event;
-
     var DataEvent = (function (_super) {
         __extends(DataEvent, _super);
         function DataEvent(type, data) {
@@ -42,11 +39,10 @@ var tevents;
         return DataEvent;
     })(Event);
     tevents.DataEvent = DataEvent;
-
     var PropertyChangeEvent = (function (_super) {
         __extends(PropertyChangeEvent, _super);
         function PropertyChangeEvent(propertyName, oldValue, newValue) {
-            if (typeof propertyName === "undefined") { propertyName = ''; }
+            if (propertyName === void 0) { propertyName = ''; }
             _super.call(this, 'propertyChange');
             this.propertyName = propertyName;
             this.oldValue = oldValue;
@@ -55,17 +51,15 @@ var tevents;
         return PropertyChangeEvent;
     })(Event);
     tevents.PropertyChangeEvent = PropertyChangeEvent;
-
     var Handler = (function () {
         function Handler(handlerFunction, useCapture, once) {
-            if (typeof once === "undefined") { once = false; }
+            if (once === void 0) { once = false; }
             this.handlerFunction = handlerFunction;
             this.useCapture = useCapture;
             this.once = once;
         }
         return Handler;
     })();
-
     var Dispatcher = (function () {
         function Dispatcher() {
             this.listeners = {};
@@ -75,51 +69,40 @@ var tevents;
                 this.listeners[eventType] = [];
             }
         };
-
         Dispatcher.prototype.indexOfEventHandler = function (eventType, func) {
             var listeners = this.listeners[eventType];
-
             if (!listeners) {
                 return -1;
             }
-
             for (var i = 0; i < listeners.length; i += 1) {
                 if (listeners[i].handlerFunction === func) {
                     return i;
                 }
             }
-
             return -1;
         };
-
         Dispatcher.prototype.on = function (eventType, func, useCapture) {
-            if (typeof useCapture === "undefined") { useCapture = false; }
+            if (useCapture === void 0) { useCapture = false; }
             this.initHandlersForType(eventType);
             this.listeners[eventType].push(new Handler(func, useCapture, false));
             return this;
         };
-
         Dispatcher.prototype.once = function (eventType, func, useCapture) {
-            if (typeof useCapture === "undefined") { useCapture = false; }
+            if (useCapture === void 0) { useCapture = false; }
             this.initHandlersForType(eventType);
             this.listeners[eventType].push(new Handler(func, useCapture, true));
             return this;
         };
-
         Dispatcher.prototype.removeEventListener = function (eventType, func) {
             var index = this.indexOfEventHandler(eventType, func);
-
             if (index !== -1) {
                 this.listeners[eventType].splice(index, 1);
             }
-
             return this;
         };
-
         Dispatcher.prototype.hasEventListener = function (eventType) {
             return this.listeners[eventType] !== undefined && this.listeners[eventType].length > 0;
         };
-
         Dispatcher.prototype.callListeners = function (event) {
             if (event.currentTarget.hasEventListener(event.type)) {
                 event.currentTarget.listeners[event.type].forEach(function (handler) {
@@ -136,7 +119,6 @@ var tevents;
                 });
             }
         };
-
         Dispatcher.findParents = function (target) {
             var parents = [];
             while (target = target.parent) {
@@ -144,7 +126,6 @@ var tevents;
             }
             return parents;
         };
-
         Dispatcher.prototype.capturePhase = function (event) {
             var parents = Dispatcher.findParents(event.target);
             event.phase = tevents.CAPTURE_PHASE;
@@ -153,7 +134,6 @@ var tevents;
                 this.callListeners(event);
             }
         };
-
         Dispatcher.prototype.targetPhase = function (event) {
             if (!event.isPropagationStopped) {
                 event.phase = tevents.TARGET_PHASE;
@@ -161,7 +141,6 @@ var tevents;
                 this.callListeners(event);
             }
         };
-
         Dispatcher.prototype.bubblingPhase = function (event) {
             event.phase = tevents.BUBBLING_PHASE;
             while (!event.isPropagationStopped && event.currentTarget.parent) {
@@ -169,24 +148,20 @@ var tevents;
                 this.callListeners(event);
             }
         };
-
         Dispatcher.prototype.dispatchEvent = function (event) {
             if (typeof event === 'string') {
                 event = new Event(event);
             }
             event.target = this;
-
             this.capturePhase(event);
             this.targetPhase(event);
             this.bubblingPhase(event);
-
             return this;
         };
         return Dispatcher;
     })();
     tevents.Dispatcher = Dispatcher;
 })(tevents || (tevents = {}));
-
 if (!this['document']) {
     Object.keys(tevents).forEach(function (key) {
         _this[key] = tevents[key];
